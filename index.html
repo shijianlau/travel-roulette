@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅行目标转盘</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #wheel {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 5px solid #333;
+            position: relative;
+            overflow: hidden;
+        }
+        .segment {
+            width: 50%;
+            height: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-origin: 0 0;
+            background-color: #f0f0f0;
+            border: 2px solid #333;
+        }
+        #pointer {
+            width: 0; 
+            height: 0; 
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 30px solid #333;
+            position: absolute;
+            top: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        #spinButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div id="pointer"></div>
+    <div id="wheel"></div>
+    <button id="spinButton">转动</button>
+
+    <script>
+        const destinations = [
+            "深圳", "珠海", "佛山", "韶关", "惠州", 
+            "东莞", "广州南沙", "清远", "江门", 
+            "肇庆", "阳江", "河源", "梅州", "汕尾"
+        ];
+
+        const wheel = document.getElementById('wheel');
+
+        // Create segments
+        destinations.forEach((destination, index) => {
+            const segment = document.createElement('div');
+            segment.className = 'segment';
+            segment.style.transform = `rotate(${index * (360 / destinations.length)}deg) skewY(${90 - (360 / destinations.length)}deg)`;
+            segment.style.backgroundColor = `hsl(${index * (360 / destinations.length)}, 80%, 70%)`;
+
+            const text = document.createElement('div');
+            text.style.position = 'absolute';
+            text.style.top = '50%';
+            text.style.left = '50%';
+            text.style.transform = 'rotate(-90deg) translateY(-100%)';
+            text.style.transformOrigin = '0 0';
+            text.style.width = '200%';
+            text.style.textAlign = 'center';
+            text.innerText = destination;
+
+            segment.appendChild(text);
+            wheel.appendChild(segment);
+        });
+
+        // Spin function
+        document.getElementById('spinButton').addEventListener('click', () => {
+            const randomDegree = Math.floor(Math.random() * 360) + 360 * 3; // At least 3 full rotations
+            wheel.style.transition = 'transform 4s ease-out';
+            wheel.style.transform = `rotate(${randomDegree}deg)`;
+        });
+    </script>
+</body>
+</html>
